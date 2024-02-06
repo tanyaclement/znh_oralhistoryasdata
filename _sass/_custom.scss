@@ -93,3 +93,7 @@ element {
 .btn-outline-dark:hover {
   background-color: #212529 !important;
 }
+
+.hover-underline{
+  &:hover {text-decoration: underline;}
+}
