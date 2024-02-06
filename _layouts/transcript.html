@@ -100,12 +100,16 @@ endcapture -%}
         {% if page.object-id == 'all' %}
         {% for transcript in site.data.transcripts %}{%assign transcript-name = transcript[0] %}
         {% for item in transcript[1] %}
-        <div id="{{page.object-id}}{{ forloop.index }}" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %} row line my-3">
-          <div class="linenum col-1 small mt-2"><a href="{{ forloop.index | prepend: transcript-name | prepend: '.html#' | prepend: transcript-name | prepend: '/transcripts/' | relative_url }}">{{transcript-name}}-{{ forloop.index }}</a></div>
-          <p class="words col-10 col-md-8 col-print-10 my-3">
-            {%if item.speaker%}{{item.speaker | remove: ":"}}: {%endif%}{{item.words}}
-          </p>
+        {% assign prev_index = forloop.index0 | times: 1 | minus: 1 %}
+        {% assign prev_speaker = items[prev_index].speaker %}
+        {% assign mod = forloop.index | plus: 1 | modulo: 5 %}
+        <div id="{{page.object-id}}{{ forloop.index }}" class="{%- assign tags = item.tags | split: ";" | compact | where_exp: 'item', 'item != " "' %}{% for tag in tags %}{{tag | slugify }} {% endfor %} row line my-1">
 
+          <p class="words col-md-10 col-lg-8 col-print-12 pr-0">
+
+            {% unless item.speaker == prev_speaker %}{%if item.speaker %}<span class="fw-bold pe-3 pb-3">{{item.speaker | remove:
+              ":"}}:</span>{% endif %}{% endunless %}{{item.words}}
+          </p>
         </div>
         {% endfor %}{% endfor %}
         {% else %}
